@@ -6,7 +6,7 @@ import pickle
 import cdflib
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--data", type=str, help="Choose wi mag or swe")
+parser.add_argument("--data", type=str, help="Choose wi mag or swe to download")
 args = parser.parse_args()
 download = False
 convert = True
