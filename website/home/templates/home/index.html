@@ -1,0 +1,110 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>Sun Watcher</title>
+</head>
+
+<body class="d-flex flex-column justify-content-center align-items-center">
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between mb-5">
+            <div class="d-flex">
+                <img src="{% static 'home/images/SunWatcherLogo.png' %}" class="img-fluid sclogo" alt="Sun Watcher Logo">
+            </div>
+            <div class="d-flex">
+		        <img src="{% static 'home/images/Space_Apps_Logo.png' %}" class="img-fluid" style="height: 70%;" alt="SpaceApps Challenge">
+            </div>
+        </div>
+    </div>
+
+    <p>
+        <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="font-family: Rubik Mono One;">
+          About the project
+        </button>
+    </p>
+    <div class="collapse" id="collapseExample" style="width: 50%;">
+        <div class="card card-body d-flex">
+            <h3>Chosen Challenge</h3>
+            <h4>Save the earth from another Carrington Event!</h4>
+            <p>If a major space weather event like the Carrington Event of 1859 were to occur today, the impacts to society could be devastating. Our challenge is to develop a machine learning algorithm or neural network pipeline to correctly track changes in the peak solar wind speed and provide an early warning of the next potential Carrington-like event.</p>
+            <h3>Our team's idea</h3>
+            The idea was to develop the following:
+            <ul>
+                <li>Use the pytorch lightning framework to train several networks on the dataset (inputs from the sensor of DSCOVR and targets from WIND) using the Gaussian Negative Log Likelihood to account for the sensor noise. The idea is to predict a distribution for the resulting value in order to have an uncertainty estimate</li>
+                <li>Measure the quality of the results using a classic loss such as the RMSE (to be minimized) or the L1 Loss. Measure the quality of the uncertainty estimation using calibration plots (actual quantiles vs. expected quantiles)</li>
+                <li>If necessary, use deep ensembles (Lakshminarayan et al. 2017) to improve uncertainty estimates. It will reduce bias and provide better estimates: the networks will agree on points with a lot of data evidence, but will differ on points where doubt is possible, and therefore improve uncertainty estimates</li>
+            </ul>
+            <p>The present website helps you retrieve data from the trained neural network analysing data from the DSCOVR satellite.</p>
+            <ul>After retrieving the dataset, you will find a file containing a list of tensors containing the following:
+                <li>The batch number</li>
+                <li>The 5 following values
+                    <ul>
+                        <li>Velocity along the x-axis (Vx)</li>
+                        <li>Velocity along the y-axis (Vy)</li>
+                        <li>Velocity along the z-axis (Vz)</li>
+                        <li>Proton Density (Np)</li>
+                        <li>Thermal Speed (W)</li>
+                    </ul>
+                </li>
+                <li>The 2 following values
+                    <ul>
+                        <li>Mean value</li>
+                        <li>Variance value</li>
+                    </ul>
+                </li>
+            </ul>
+            <h3>Our work so far</h3>
+	    <p>We retrieve the data manually and compute a Dynamic Time Warping mapping between the two data sets.</p>
+	    <p>Our website is ready to use, only the connection with the compute part is missing.</p>
+	    <p>We gladly show you some beautified data instead!</p>
+        </div>
+    </div>
+
+    <form action="{% url 'index' %}" method="post" class="mb-3">
+	<div class="mb-3">
+	  <label for="date" class="form-label">Date</label>
+	  <input type="date" name="date" class="form-control" id="date" aria-describedby="fromHelp" value="2022-01-01">
+	  <div id="fromHelp" class="form-text">Shhh, we let you see the data, but... this is a secret...</div>
+	</div>
+	<div class="mb-3">
+	  <label for="from" class="form-label">Time From</label>
+	  <input type="time" name="from_time" class="form-control" id="from" value="03:30">
+	</div>
+        <div class="mb-3">
+            <label for="to" class="form-label">Time To</label>
+            <input type="time" name="to_time" class="form-control" id="to" value="08:30">
+        </div>
+		<button type="submit" class="btn btn-primary mt-2">Retrieve data</button>
+	</form>
+
+    {% if index_type == 1%}
+        <p class="mb-2" style="font-style: bold; color: red;">Sorry, we could not retrieve the data ='(</p>
+    {% endif %}
+    {% if index_type == 2 %}
+    <div class="container mt-5" style="width: 90%;">
+        <div class="d-flex justify-content-between" style="height: 80%;">
+            <img src="{% static 'home/images/Mag_time-shifted.png' %}" class="img-fluid mb-3 mx-2" alt="mag_time_shifted">
+            <img src="{% static 'home/images/swedensity.png' %}" class="img-fluid mb-3 mx-2" alt="swedensity">
+        </div>
+        <div class="d-flex justify-content-between" style="height: 80%;">
+            <img src="{% static 'home/images/swetemperature.png' %}" class="img-fluid mb-3 mx-2" alt="swetemperature">
+            <img src="{% static 'home/images/swevelocity.png' %}" class="img-fluid mb-3 mx-2" alt="swevelocity">
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>
