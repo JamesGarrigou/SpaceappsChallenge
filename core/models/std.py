@@ -9,7 +9,7 @@ from ..training import cli_train
 from ..training.datamodule import RegressionDataModule
 from ..training.network import STD
 from ..training.optimization_procedure import optim
-from ..training.routines import SingleRegression
+from ..training.routine import SingleRegression
 
 
 # fmt: on
